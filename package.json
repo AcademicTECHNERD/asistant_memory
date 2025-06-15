@@ -1,0 +1,63 @@
+{
+  "name": "memory-assistant",
+  "version": "1.0.0",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm --prefix memory-assistant-client run dev\" \"npm --prefix memory-assistant-server start\" \"electron .\"",
+    "build-renderer": "npm --prefix memory-assistant-client run build",
+    "build": "npm run build-renderer && electron-builder"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "electron": "^36.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.memory.assistant",
+    "productName": "Memory Assistant",
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    },
+    "files": [
+      "electron-main.js",
+      "memory-assistant-client/dist",
+      "memory-assistant-server/**",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__}/**"
+    ],
+    "extraResources": [
+  {
+    "from": "memory-assistant-server",
+    "to": "server"
+  },
+  {
+    "from": "memory-assistant-server/.env",
+    "to": "server/.env"
+  }
+], 
+    "extraFiles": [
+  {
+    "from": "memory-assistant-server",
+    "to": "server",
+    "filter": ["**/*", ".env"]
+  },
+  {
+    "from": "memory-assistant-server/node_modules",
+    "to": "server/node_modules"
+  }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Memory Assistant"
+    }
+  }
+}
